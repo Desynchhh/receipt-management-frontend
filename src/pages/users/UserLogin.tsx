@@ -1,9 +1,15 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { IContext } from "../../@types/receipt-manager";
+import Context from "../../Context";
 
 import { buildFormData, FormErrors } from "../../components/Form";
 
 const UserLogin = () => {
+  document.title = "Budgeze - Sign in";
+  const context = useContext(Context) as IContext
+
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
 

@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+
+import Context from "../../Context";
+import { IContext } from "../../@types/receipt-manager";
 
 import Guestbar from "./Guestbar";
 import Userbar from "./Userbar";
 
-interface Props {
-    isLoggedIn: boolean
-}
+const Navbar = () => {
+    const context = useContext(Context) as IContext;
 
-const Navbar = (props:Props) => {
+    const [jwt, setJwt] = context.jwtContext;
+
     return(
         <nav className="relative p-6">
             <div className="flex items-center justify-between">
@@ -16,7 +20,7 @@ const Navbar = (props:Props) => {
                 </div>
 
                 <div className="hidden sm:flex">
-                    {props.isLoggedIn ? <Userbar /> : <Guestbar />}
+                    {jwt.length >= 1 ? <Userbar /> : <Guestbar />}
                 </div>
             </div>
         </nav>

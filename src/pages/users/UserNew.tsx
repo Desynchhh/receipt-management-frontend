@@ -20,6 +20,7 @@ interface CreateUserResponse {
 }
 
 const UserNew = () => {
+  document.title = "Budgeze - Sign up";
   const [errors, setErrors] = useState([]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {

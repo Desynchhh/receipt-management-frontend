@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { Routes, Route } from "react-router-dom";
 
+import { IContext, StateContext } from "./@types/receipt-manager";
+
+import Context from "./Context";
 import Navbar from "./components/nav/Navbar";
 import Home from "./pages/Home";
 import ReceiptList from "./pages/receipts/ReceiptList";
@@ -10,36 +13,33 @@ import UserLogin from "./pages/users/UserLogin";
 import UserLogout from "./pages/users/UserLogout";
 import UserNew from "./pages/users/UserNew";
 
-function App() {
-	const DEFAULT_DOCUMENT_TITLE = "Budgeze";
-	const [documentTitle, setDocumentTitle] = useState(document.title);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+const App = () => {
 	const [jwt, setJwt] = useState("");
 
-	useEffect(() => {
-		if (documentTitle.length <= 0) {
-			setDocumentTitle(DEFAULT_DOCUMENT_TITLE);
-		}
-		document.title = documentTitle;
-	}, [documentTitle]);
+	const jwtContext: StateContext = [ jwt, setJwt ];
+	const context: IContext = {
+		"jwtContext": jwtContext
+	};
 
 	return (
-		<div className="container mx-auto">
-			<Navbar isLoggedIn={isLoggedIn} />
-			<Routes>
-				<Route index element={<Home />} />
-				<Route path="/receipts">
-					<Route index element={<ReceiptList />} />
-					<Route path=":id" element={<Receipt />} />
-					<Route path="create" element={<ReceiptNew />} />
-				</Route>
-				<Route path="/user">
-					<Route path="create" element={<UserNew />} />
-					<Route path="login" element={<UserLogin />} />
-					<Route path="logout" element={<UserLogout />} />
-				</Route>
-			</Routes>
-		</div>
+		<Context.Provider value={context}>
+			<div className="container mx-auto">
+				<Navbar />
+				<Routes>
+					<Route index element={<Home />} />
+					<Route path="/receipts">
+						<Route index element={<ReceiptList />} />
+						<Route path=":id" element={<Receipt />} />
+						<Route path="create" element={<ReceiptNew />} />
+					</Route>
+					<Route path="/user">
+						<Route path="create" element={<UserNew />} />
+						<Route path="login" element={<UserLogin />} />
+						<Route path="logout" element={<UserLogout />} />
+					</Route>
+				</Routes>
+			</div>
+		</Context.Provider>
 	)
 }
 
