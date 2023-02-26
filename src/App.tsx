@@ -1,14 +1,46 @@
-import { useState } from 'react'
+import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/nav/Navbar";
+import Home from "./pages/Home";
+import ReceiptList from "./pages/receipts/ReceiptList";
+import Receipt from "./pages/receipts/Receipt";
+import ReceiptNew from "./pages/receipts/ReceiptNew";
+import UserLogin from "./pages/users/UserLogin";
+import UserLogout from "./pages/users/UserLogout";
+import UserNew from "./pages/users/UserNew";
 
 function App() {
-  const [count, setCount] = useState(0)
+	const DEFAULT_DOCUMENT_TITLE = "Budgeze";
+	const [documentTitle, setDocumentTitle] = useState(document.title);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [jwt, setJwt] = useState("");
 
-  return (
-    <div>
-      <h1 className="text-3xl mb-3">Hello world!</h1>
-      <button className="px-5 py-2 border border-solid border-blue-300 text-blue-300 rounded-xl" onClick={() => setCount(prevCount => prevCount+1)}>{count}</button>
-    </div>
-  )
+	useEffect(() => {
+		if (documentTitle.length <= 0) {
+			setDocumentTitle(DEFAULT_DOCUMENT_TITLE);
+		}
+		document.title = documentTitle;
+	}, [documentTitle]);
+
+	return (
+		<div className="container mx-auto">
+			<Navbar isLoggedIn={isLoggedIn} />
+			<Routes>
+				<Route index element={<Home />} />
+				<Route path="/receipts">
+					<Route index element={<ReceiptList />} />
+					<Route path=":id" element={<Receipt />} />
+					<Route path="create" element={<ReceiptNew />} />
+				</Route>
+				<Route path="/user">
+					<Route path="create" element={<UserNew />} />
+					<Route path="login" element={<UserLogin />} />
+					<Route path="logout" element={<UserLogout />} />
+				</Route>
+			</Routes>
+		</div>
+	)
 }
 
 export default App
