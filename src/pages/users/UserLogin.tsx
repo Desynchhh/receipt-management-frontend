@@ -1,7 +1,7 @@
 import { FormEvent, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { IContext } from "../../@types/receipt-manager";
+import { IContext, UserObject, HttpPostResponse } from "../../@types/receipt-manager";
 import Context from "../../Context";
 
 import { buildFormData, FormErrors } from "../../components/Form";
@@ -11,13 +11,13 @@ const UserLogin = () => {
   const context = useContext(Context) as IContext
 
   const [errors, setErrors] = useState([]);
+  const [jwt, setJwt] = context.jwtContext;
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const formData = buildFormData(e.target as HTMLFormElement);
-    console.log(formData);
-    const res = await fetch("http://localhost:8080/apiv2/users/login", {
+    const res = await fetch(`${context.apiUrl}/users/login`, {
       method: "post",
       body: formData,
       headers: {
@@ -25,12 +25,15 @@ const UserLogin = () => {
       }
     });
 
-    const data = await res.json();
+    const data: HttpPostResponse<string, never[]> = await res.json();
     if (data.Failure) {
       setErrors(data.Failure);
       return;
     }
-    navigate("/", { replace: true });
+    if(data.Success) {
+      setJwt(data.Success);
+      navigate("/", { replace: true });
+    }
   }
 
   return (

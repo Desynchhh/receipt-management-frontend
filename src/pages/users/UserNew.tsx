@@ -1,41 +1,26 @@
-import { FormEvent, useState } from "react";
-
+import { FormEvent, useState, useContext } from "react";
+import { IContext, UserObject, HttpPostResponse } from "../../@types/receipt-manager";
 import { buildFormData, FormErrors } from "../../components/Form";
+import Context from "../../Context";
 
-interface UserObject {
-  id: number,
-  email: string,
-  firstName: string,
-  lastName: string,
-  password: string,
-  apiToken?: string,
-  createdAt: string,
-  updatedAt: string,
-  isDeleted: boolean
-}
-
-interface CreateUserResponse {
-  Failure?: never[],
-  Success?: UserObject
-}
 
 const UserNew = () => {
   document.title = "Budgeze - Sign up";
+  const context = useContext(Context) as IContext;
   const [errors, setErrors] = useState([]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const formData = buildFormData(e.target as HTMLFormElement);
 
-    const res = await fetch("http://localhost:8080/apiv2/users/create", {
+    const res = await fetch(`${context.apiUrl}/users/create`, {
       method: "post",
       body: formData,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       }
     });
-    const data: CreateUserResponse = await res.json();
-    console.log(data);
+    const data: HttpPostResponse<UserObject, never[]> = await res.json();
 
     if (data.Failure) {
       setErrors(data.Failure);

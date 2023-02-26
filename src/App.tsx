@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 
 import { IContext, StateContext } from "./@types/receipt-manager";
 
+import { ProtectedRoute } from "./components/ProtectedRoute";
+
 import Context from "./Context";
 import Navbar from "./components/nav/Navbar";
 import Home from "./pages/Home";
@@ -18,13 +20,15 @@ const App = () => {
 
 	const jwtContext: StateContext = [ jwt, setJwt ];
 	const context: IContext = {
-		"jwtContext": jwtContext
+		"jwtContext": jwtContext,
+		"apiUrl": "http://localhost:8080/apiv2"
 	};
 
 	return (
 		<Context.Provider value={context}>
 			<div className="container mx-auto">
 				<Navbar />
+				<ProtectedRoute />
 				<Routes>
 					<Route index element={<Home />} />
 					<Route path="/receipts">
