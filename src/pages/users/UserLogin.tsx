@@ -10,29 +10,39 @@ const UserLogin = () => {
   document.title = "Budgeze - Sign in";
   const context = useContext(Context) as IContext
 
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState<string[]>([]);
   const [jwt, setJwt] = context.jwtContext;
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    const formData = buildFormData(e.target as HTMLFormElement);
-    const res = await fetch(`${context.apiUrl}/users/login`, {
-      method: "post",
-      body: formData,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+    try {
+      const formData = buildFormData(e.target as HTMLFormElement);
+      const res = await fetch(`${context.apiUrl}/users/login`, {
+        method: "post",
+        body: formData,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        }
+      });
+  
+      const data: HttpPostResponse<string, string[]> = await res.json();
+      if (data.Failure) {
+        setErrors(data.Failure);
+        return;
       }
-    });
-
-    const data: HttpPostResponse<string, never[]> = await res.json();
-    if (data.Failure) {
-      setErrors(data.Failure);
-      return;
-    }
-    if(data.Success) {
-      setJwt(data.Success);
-      navigate("/", { replace: true });
+      if(data.Success) {
+        setJwt(data.Success);
+        navigate("/", { replace: true });
+      }
+    } catch (error) {
+      if(error instanceof TypeError) {
+        if(error.message.includes("NetworkError")) {
+          setErrors(["Could not connect to server."]);
+        }
+      } else {
+        setErrors(["Could not create user. Try again later."]);
+      }      
     }
   }
 

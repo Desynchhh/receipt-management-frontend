@@ -1,5 +1,9 @@
-interface Props {
+interface ErrorProps {
   errors: string[]
+}
+
+interface SuccessProps {
+  message: string
 }
 
 
@@ -14,7 +18,7 @@ const buildFormData = (formElement: HTMLFormElement): URLSearchParams => {
   return formData;
 }
 
-const FormErrors = (props: Props) => {
+const FormErrors = (props: ErrorProps) => {
   return (
     <>
       <div className="bg-red-200 text-red-500 p-2 mt-3">
@@ -28,4 +32,15 @@ const FormErrors = (props: Props) => {
   )
 }
 
-export { buildFormData, FormErrors };
+const FormSuccess = (props: SuccessProps) => {
+  return (
+    <>
+      <div className="bg-green-200 text-green-500 p-2 mt-3">
+        <p>{props.message}</p>
+      </div>
+    </>
+  )
+
+}
+
+export { buildFormData, FormErrors, FormSuccess };
