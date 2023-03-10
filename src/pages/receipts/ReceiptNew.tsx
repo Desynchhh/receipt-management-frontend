@@ -31,7 +31,7 @@ const ReceiptNew = () => {
       product,
       price,
       discount,
-      contributors: contributorIds
+      contributorIds: contributorIds
     }
     setItems(prevItems => [...prevItems, newItem]);
     // const formElement = e.currentTarget;
@@ -65,10 +65,26 @@ const ReceiptNew = () => {
 
     const receipt: PostReceipt = {
       store: receiptStore,
-      date: dateBought,
-      items: items
+      date: `${dateBought}T00:00:00`,
+      items: items,
     };
-    console.log(receipt);
+
+    console.log(JSON.stringify(receipt));
+
+    fetch("http://127.0.0.1:8080/apiv2/receipts/create", {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "applicaton/json",
+      },
+      body: JSON.stringify(receipt)
+    }).then(res => {
+      return res.json();
+    }).then(json => {
+      return console.log(json);
+    }).catch(e => {
+      return console.warn(e);
+    });
   }
 
   const hasEnteredData = receiptStore.length > 0 || dateBought.length > 0;
@@ -84,25 +100,40 @@ const ReceiptNew = () => {
         </div>
         <div className="w-full ml-40 border-2 text-center">
           {hasEnteredData &&
-            <div className="mt-1 pb-2 border-b-2 border-dashed">
+            <header className="mt-1 pb-2 border-b-2 border-dashed">
               <p className="text-3xl font-bold">{receiptStore}</p>
               <p>{dateBought}</p>
-            </div>
+            </header>
           }
-          {items.map(item => {
-            return(
-            <div key={item.product} className="flex justify-between mx-3">
-              <div className="flex max-w-1/10 w-full">
-                <p className="mr-2">{item.product}</p><span className="underline">edit</span>
+          <div className="receipt-body flex flex-col grow justify-between h-3/5">
+            <div className="">
+              <div className="flex justify-between mx-3">
+                <div className="flex max-w-1/10 w-full ">
+                  <p className="mr-2 font-bold">PRODUCT</p>
+                </div>
+                <div className="flex justify-between w-2/12">
+                  <p className="font-bold">PRICE</p>
+                  <p className="font-bold">DISCOUNT</p>
+                </div>
               </div>
-              <div className="flex justify-between w-2/12">
-                <p>{item.price}</p>
-                <p>{item.discount}</p>
-              </div>
+              {items.map(item => {
+                return(
+                <div key={item.product} className="flex justify-between mx-3">
+                  <div className="flex max-w-1/10 w-full ">
+                    <p className="mr-2">{item.product}</p><span className="underline">edit</span>
+                  </div>
+                  <div className="flex justify-between w-2/12">
+                    <p className="">{item.price}</p>
+                    <p>{item.discount}</p>
+                  </div>
+                </div>
+                );
+              })}
             </div>
-            );
-          })}
-          <p className="border-t-2 border-solid">Subtotal: {subtotal}</p>
+            <div className="text-left">
+              <p className="border-t-2 border-solid p-1 pl-2">Total: {subtotal}</p>
+            </div>
+          </div>
         </div>
       </div>
       {showItemModal &&

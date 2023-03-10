@@ -41,7 +41,7 @@ export interface ReceiptItem {
   product: string,
   price: number,
   discount: number,
-  contributors?: number[],
+  contributorIds?: number[],
 }
 
 export interface Receipt {
