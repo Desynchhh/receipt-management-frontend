@@ -1,5 +1,5 @@
 import { FormEvent, useState, useContext } from "react";
-import { IContext, UserObject, HttpPostResponse } from "../../@types/receipt-manager";
+import { IContext, FullUserObject, HttpPostResponse } from "../../@types/receipt-manager";
 import { buildFormData, FormErrors, FormSuccess } from "../../components/Form";
 import Context from "../../Context";
 
@@ -27,7 +27,7 @@ const UserNew = () => {
           "Content-Type": "application/x-www-form-urlencoded",
         }
       });
-      const data: HttpPostResponse<UserObject, string[]> = await res.json();
+      const data: HttpPostResponse<FullUserObject, string[]> = await res.json();
   
       if (data.Failure) {
         setErrors(data.Failure);
@@ -59,7 +59,7 @@ const UserNew = () => {
           <div className="flex flex-col">
             <div className="flex justify-between">
               <label className="mr-1" htmlFor="firstName">First name</label>
-              <input type="text" placeholder="First name" name="firstName" className="text-black mb-2 shadow-pink-400" />
+              <input type="text" placeholder="First name" name="firstName" className="text-black mb-2" />
             </div>
             <div className="flex justify-between">
               <label className="mr-1" htmlFor="lastName">Last name</label>

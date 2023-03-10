@@ -2,15 +2,15 @@ import React from "react";
 
 export type StateContext = [
 	string,
-	React.Dispatch<React.SetStateAction<string>>
+	React.Dispatch<React.SetStateAction<string>>,
 ];
 
 export interface IContext {
 	"jwtContext": StateContext,
-	"apiUrl": string
+	"apiUrl": string,
 }
 
-export interface UserObject {
+export interface FullUserObject {
   id: number,
   email: string,
   firstName: string,
@@ -19,10 +19,46 @@ export interface UserObject {
   apiToken?: string,
   createdAt: string,
   updatedAt: string,
-  isDeleted: boolean
+  isDeleted: boolean,
+}
+
+export interface UserDetails {
+  id: number,
+  email: string,
+  firstName: string,
+  lastName: string,
+}
+
+// Ex: 2023-03-01
+export type ReceiptDate = `${number}${number}${number}${number}-${number}${number}-${number}${number}` | "";
+export const receiptDateRegex = /^[\d]{4}-[\d]{2}-[\d]{2}$/;
+
+// Ex: 2023-03-01T12:00:00
+export type ReceiptDateTime = `${ReceiptDate}T${number}${number}:${number}${number}:${number}${number}`;
+export const receiptDateTimeRegex = /^[\d]{4}-[\d]{2}-[\d]{2}T[\d]{2}:[\d]{2}:[\d]{2}$/;
+
+export interface ReceiptItem {
+  product: string,
+  price: number,
+  discount: number,
+  contributors?: number[],
+}
+
+export interface Receipt {
+  userId?: number,
+  store: string,
+  date: ReceiptDate | ReceiptDateTime,
+  items?: ReceiptItem[],
+  subtotal: number
+}
+
+export interface PostReceipt {
+  store: string,
+  date: ReceiptDate | ReceiptDateTime,
+  items: ReceiptItem[]
 }
 
 export interface HttpPostResponse<S, F> {
   Failure?: F,
-  Success?: S
+  Success?: S,
 }

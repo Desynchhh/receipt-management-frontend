@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-gray;
+    @apply bg-lightBlack;
+  }
+
+  input[type="number"],
+  input[type="number"] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+  }
+}
+
+@layer components {
+  .modal {
+    @apply fixed;
+    @apply z-10;
+    @apply top-1/2;
+    @apply left-1/2;
+    @apply -translate-x-1/2;
+    @apply -translate-y-1/2;
+    @apply border-2;
+    @apply border-black;
+    @apply rounded-lg;
+    @apply overflow-auto;
+    @apply bg-lightBlack;
+    @apply w-full;
+    @apply text-gray;
+    @apply sm:max-w-screen-sm;
+    @apply md:max-w-screen-md;
+    @apply lg:max-w-screen-lg;
+    @apply xl:max-w-screen-xl;
+  }
+
+  .button {
+    @apply text-gray;
+    @apply mb-2;
+    @apply p-1;
+    @apply bg-lightGray;
+    @apply cursor-pointer;
+    @apply w-full;
+    @apply hover:bg-gray;
+    @apply hover:text-lightGray;
+  }
+}

@@ -1,7 +1,7 @@
 import { FormEvent, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { IContext, UserObject, HttpPostResponse } from "../../@types/receipt-manager";
+import { IContext, FullUserObject, HttpPostResponse } from "../../@types/receipt-manager";
 import Context from "../../Context";
 
 import { buildFormData, FormErrors } from "../../components/Form";
