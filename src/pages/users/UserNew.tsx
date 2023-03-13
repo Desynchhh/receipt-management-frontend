@@ -1,12 +1,12 @@
-import { FormEvent, useState, useContext } from "react";
-import { IContext, FullUserObject, HttpPostResponse } from "../../@types/receipt-manager";
+import { FormEvent, useState } from "react";
+import { FullUserObject, HttpPostResponse } from "../../@types/receipt-manager";
 import { buildFormData, FormErrors, FormSuccess } from "../../components/Form";
-import Context from "../../Context";
+import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 
 const UserNew = () => {
   document.title = "Budgeze - Sign up";
-  const context = useContext(Context) as IContext;
+  const [jwt, setJwt, apiUrl] = useReceiptContext();
   const [errors, setErrors] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
@@ -20,7 +20,7 @@ const UserNew = () => {
     const formData = buildFormData(form);
     
     try {
-      const res = await fetch(`${context.apiUrl}/users/create`, {
+      const res = await fetch(`${apiUrl}/users/create`, {
         method: "post",
         body: formData,
         headers: {

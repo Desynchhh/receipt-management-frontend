@@ -1,10 +1,7 @@
-import { useContext } from "react";
-import { IContext } from "../@types/receipt-manager";
-import Context from "../Context";
+import { useReceiptContext } from "../hooks/useReceiptContext";
 
 export const ProtectedRoute = () => {
-  const context = useContext(Context) as IContext
-  const [jwt, setJwt] = context.jwtContext;
+  const [jwt, setJwt, apiUrl] = useReceiptContext();
 
   const jwtRegex = new RegExp(/^[\w-]+\.[\w-]+\.[\w-]+$/);
 

@@ -20,7 +20,7 @@ import UserNew from "./pages/users/UserNew";
 
 
 const App = () => {
-	const [jwt, setJwt] = useState("s");
+	const [jwt, setJwt] = useState("");
 
 	const jwtContext: StateContext = [ jwt, setJwt ];
 	const context: IContext = {

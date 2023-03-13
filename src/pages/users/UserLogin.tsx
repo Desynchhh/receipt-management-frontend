@@ -1,24 +1,23 @@
-import { FormEvent, useState, useEffect, useContext } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { IContext, FullUserObject, HttpPostResponse } from "../../@types/receipt-manager";
-import Context from "../../Context";
+import { HttpPostResponse } from "../../@types/receipt-manager";
+
+import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 import { buildFormData, FormErrors } from "../../components/Form";
 
 const UserLogin = () => {
   document.title = "Budgeze - Sign in";
-  const context = useContext(Context) as IContext
-
   const [errors, setErrors] = useState<string[]>([]);
-  const [jwt, setJwt] = context.jwtContext;
+  const [jwt, setJwt, apiUrl] = useReceiptContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     try {
       const formData = buildFormData(e.target as HTMLFormElement);
-      const res = await fetch(`${context.apiUrl}/users/login`, {
+      const res = await fetch(`${apiUrl}/users/login`, {
         method: "post",
         body: formData,
         headers: {

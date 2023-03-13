@@ -1,16 +1,11 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-
-import Context from "../../Context";
-import { IContext } from "../../@types/receipt-manager";
+import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 import Guestbar from "./Guestbar";
 import Userbar from "./Userbar";
 
 const Navbar = () => {
-    const context = useContext(Context) as IContext;
-
-    const [jwt, setJwt] = context.jwtContext;
+    const [jwt, setJwt, apiUrl] = useReceiptContext();
 
     return(
         <nav className="relative p-6">

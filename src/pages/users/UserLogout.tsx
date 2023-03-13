@@ -1,15 +1,14 @@
-import { useEffect, useContext } from "react";
-import Context from "../../Context";
-import { IContext, HttpPostResponse } from "../../@types/receipt-manager";
+import { useEffect } from "react";
+import { HttpPostResponse } from "../../@types/receipt-manager";
+import { useReceiptContext } from "../../hooks/useReceiptContext";
 import { useNavigate } from "react-router-dom";
 
 const UserLogout = () => {
-  const context = useContext(Context) as IContext;
-  const [jwt, setJwt] = context.jwtContext;
+  const [jwt, setJwt, apiUrl] = useReceiptContext();
   const navigate = useNavigate();
 
   const fetchLogout = async (): Promise<boolean> => {
-    const res = await fetch(`${context.apiUrl}/users/logout`, {
+    const res = await fetch(`${apiUrl}/users/logout`, {
       method: "post",
       // headers: {
       //   "Authorization": `Bearer ${jwt}`
