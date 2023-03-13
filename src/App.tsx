@@ -22,8 +22,8 @@ import UserNew from "./pages/users/UserNew";
 const App = () => {
 	const [jwt, setJwt] = useState("");
 
-	const jwtContext: StateContext = [ jwt, setJwt ];
-	const context: IContext = {
+	const jwtContext: StateContext<string> = [ jwt, setJwt ];
+	const context: IContext<string> = {
 		"jwtContext": jwtContext,
 		"apiUrl": "http://localhost:8080/apiv2"
 	};

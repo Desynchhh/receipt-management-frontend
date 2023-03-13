@@ -1,12 +1,12 @@
 import React from "react";
 
-export type StateContext = [
-	string,
-	React.Dispatch<React.SetStateAction<string>>,
+export type StateContext<T> = [
+	T,
+	React.Dispatch<React.SetStateAction<T>>,
 ];
 
-export interface IContext {
-	"jwtContext": StateContext,
+export interface IContext<T> {
+	"jwtContext": StateContext<T>,
 	"apiUrl": string,
 }
 
