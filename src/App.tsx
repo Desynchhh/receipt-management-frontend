@@ -1,5 +1,8 @@
 import React, { useState, useEffect, createContext } from "react";
 import { Routes, Route } from "react-router-dom";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
+library.add(faPen, faXmark);
 
 import { IContext, StateContext } from "./@types/receipt-manager";
 
@@ -15,8 +18,9 @@ import UserLogin from "./pages/users/UserLogin";
 import UserLogout from "./pages/users/UserLogout";
 import UserNew from "./pages/users/UserNew";
 
+
 const App = () => {
-	const [jwt, setJwt] = useState("");
+	const [jwt, setJwt] = useState("s");
 
 	const jwtContext: StateContext = [ jwt, setJwt ];
 	const context: IContext = {

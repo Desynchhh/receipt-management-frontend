@@ -1,9 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, FormEvent } from "react";
 import { ReceiptItem, UserDetails } from "../../@types/receipt-manager";
 import { Contributor } from "./Contributor";
 
 interface Props {
   addItem: Function,
+  editItem: ReceiptItem | null,
+  onSave: (id:number, contributors:UserDetails[], product: string, rawPrice: string, rawDiscount?: string) => void
 }
 
 const testUsers: UserDetails[] =[
@@ -29,6 +31,13 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
   const productRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const discountRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if(props.editItem) {
+      setContributors(friends.filter(friend => props.editItem?.contributorIds?.includes(friend.id)));
+      setFriends(prevFriends => prevFriends.filter(friend => !props.editItem?.contributorIds?.includes(friend.id)))
+    }
+  }, [props.editItem?.id]);
 
   const addContributor = () => {
     try {
@@ -62,21 +71,33 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
     setFriends(prevFriends => [...prevFriends, friend]);
   }
 
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const product = productRef.current ? productRef.current.value : "0.0";
+    const price = priceRef.current ? priceRef.current.value : "";
+    const discount = discountRef.current ? discountRef.current.value : "0.0";
+    if(!props.editItem) {
+      props.addItem(contributors, product, price, discount);
+      return;
+    }
+    props.onSave(props.editItem.id as number, contributors, product, price, discount);
+  }
+
   return(
     <>
-      <form className="w-full max-w-2/3" onSubmit={(e) => props.addItem(e, contributors, productRef.current?.value, priceRef.current?.value, discountRef.current?.value)}>
+      <form className="w-full max-w-2/3" onSubmit={e => onSubmit(e)}>
         <div className="flex flex-col mb-2">
           <div className="flex flex-col mb-1">
             <label className="mr-1 font-bold" htmlFor="product">Product name</label>
-            <input className="text-black mb-2" ref={productRef} type="text" placeholder="Product name" name="product" />
+            <input className="text-black mb-2" ref={productRef} type="text" placeholder="Product name" name="product" defaultValue={props.editItem ? props.editItem.product : ""} />
           </div>
           <div className="flex flex-col mb-1">
             <label className="mr-1 font-bold" htmlFor="price">Price</label>
-            <input className="text-black mb-2" ref={priceRef} type="text" placeholder="Price" name="price" />
+            <input className="text-black mb-2" ref={priceRef} type="text" placeholder="Price" name="price" defaultValue={props.editItem ? props.editItem.price : ""} />
           </div>
           <div className="flex flex-col mb-1">
             <label className="mr-1 font-bold" htmlFor="discount">Discount</label>
-            <input className="text-black mb-2" ref={discountRef} type="text" placeholder="Discount" name="discount" />
+            <input className="text-black mb-2" ref={discountRef} type="text" placeholder="Discount" name="discount" defaultValue={props.editItem ? props.editItem.discount : ""} />
           </div>
           <div className="flex flex-col mb-2">
             <label className="mr-1 font-bold" htmlFor="discount">Contributors</label>
@@ -107,7 +128,12 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
             </ul>
             }
           </div>
-          <input type="submit" value="Add" className="button" />
+          {props.editItem &&
+            <input type="submit" value="Save changes" className="button" />
+          }
+          {!props.editItem &&
+            <input type="submit" value="Add" className="button" />
+          }
         </div>
       </form>
     </>

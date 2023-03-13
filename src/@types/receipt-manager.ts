@@ -38,6 +38,7 @@ export type ReceiptDateTime = `${ReceiptDate}T${number}${number}:${number}${numb
 export const receiptDateTimeRegex = /^[\d]{4}-[\d]{2}-[\d]{2}T[\d]{2}:[\d]{2}:[\d]{2}$/;
 
 export interface ReceiptItem {
+  id?: number,
   product: string,
   price: number,
   discount: number,
