@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Receipt, PostReceipt, ReceiptItem, ReceiptDate, ReceiptDateTime, UserDetails } from "../../@types/receipt-manager";
 import { ReceiptForm } from "../../components/receipt/ReceiptForm";
 import { ItemForm } from "../../components/receipt/ItemForm";
+import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 import { Modal } from "../../components/Modal";
 
@@ -14,6 +15,7 @@ const ReceiptNew = () => {
   const [editItem, setEditItem] = useState<ReceiptItem | null>(null);
   const [showContributorModal, setShowContributorModal] = useState<boolean>(false);
   const [showItemModal, setShowItemModal] = useState<boolean>(false);
+  const [jwt, setJwt, apiUrl] = useReceiptContext();
 
   const subtotal = useMemo(() => {
     return items.reduce((acc, curr) => {
@@ -94,9 +96,10 @@ const ReceiptNew = () => {
       items: receiptItems,
     };
 
-    fetch("http://127.0.0.1:8080/apiv2/receipts/create", {
+    fetch(`${apiUrl}/receipts/create`, {
       method: "POST",
       headers: {
+        "Authorization": `Bearer ${jwt}`,
         "Accept": "application/json",
         "Content-Type": "applicaton/json",
       },
