@@ -4,6 +4,7 @@ import { Contributor } from "./Contributor";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 interface Props {
+  friends: UserDetails[],
   addItem: Function,
   editItem: ReceiptItem | null,
   onSave: (id:number, contributors:UserDetails[], product: string, rawPrice: string, rawDiscount?: string) => void
@@ -11,7 +12,7 @@ interface Props {
 
 export const ItemForm = (props:React.PropsWithChildren<Props>) => {
 
-  const [friends, setFriends] = useState<UserDetails[]>([]);
+  const [friends, setFriends] = useState<UserDetails[]>(props.friends);
   const [contributors, setContributors] = useState<UserDetails[]>([]);
   const contributorRef = useRef<HTMLSelectElement>(null);
   const productRef = useRef<HTMLInputElement>(null);
@@ -27,23 +28,6 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
     }
   }, [props.editItem?.id]);
 
-  useEffect(() => {
-    fetch(`${apiUrl}/users/friends`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${jwt}`,
-        "Accept": "application/json"
-      }
-    }).then(res => {
-      return res.json();
-    }).then((data:UserDetails[]) => {
-      console.log(data);
-      setFriends(data);
-    }).catch(err => {
-      console.log("An error occured while getting friends.");
-      console.error(err);
-    });
-  }, []);
 
   const addContributor = () => {
     try {

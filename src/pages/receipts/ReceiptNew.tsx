@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { PostReceipt, ReceiptItem, ReceiptDate, ReceiptDateTime, UserDetails } from "../../@types/receipt-manager";
@@ -9,6 +9,7 @@ import { useReceiptContext } from "../../hooks/useReceiptContext";
 import { Modal } from "../../components/Modal";
 
 const ReceiptNew = () => {
+  const [friends, setFriends] = useState<UserDetails[]>([]);
   const [receiptStore, setReceiptStore] = useState<string>("");
   const [dateBought, setDateBought] = useState<ReceiptDate>("");
   const [items, setItems] = useState<ReceiptItem[]>([]);
@@ -22,6 +23,24 @@ const ReceiptNew = () => {
       return acc;
     }, 0);
   }, [items]);
+  
+  useEffect(() => {
+    fetch(`${apiUrl}/users/friends`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${jwt}`,
+        "Accept": "application/json"
+      }
+    }).then(res => {
+      return res.json();
+    }).then((data:UserDetails[]) => {
+      console.log(data);
+      setFriends(data);
+    }).catch(err => {
+      console.log("An error occured while getting friends.");
+      console.error(err);
+    });
+  }, []);
 
   const onAddItemClick = () => {
     setShowItemModal(true);
@@ -165,7 +184,7 @@ const ReceiptNew = () => {
       </div>
       {showItemModal &&
       <Modal title="Add item to receipt" show={showItemModal} setShow={setShowItemModal}>
-        <ItemForm addItem={onAddItem} onSave={onSaveEdit} editItem={editItem} />
+        <ItemForm friends={friends} addItem={onAddItem} onSave={onSaveEdit} editItem={editItem} />
       </Modal>
       }
     </>
