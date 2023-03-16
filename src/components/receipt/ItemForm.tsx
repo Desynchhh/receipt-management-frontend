@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect, FormEvent } from "react";
+import { useState, useRef, useEffect, useMemo, FormEvent } from "react";
 import { ReceiptItem, UserDetails } from "../../@types/receipt-manager";
 import { Contributor } from "./Contributor";
+import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 interface Props {
   addItem: Function,
@@ -8,29 +9,16 @@ interface Props {
   onSave: (id:number, contributors:UserDetails[], product: string, rawPrice: string, rawDiscount?: string) => void
 }
 
-const testUsers: UserDetails[] =[
-  {
-    id: 1,
-    firstName: "Mikkel",
-    lastName: "Larsen",
-    email: "mikkellarsen939@gmail.com"
-  },
-  {
-    id: 2,
-    firstName: "Thea",
-    lastName: "Johansen",
-    email: "thea-johansen@outlook.com"
-  },
-];
-
 export const ItemForm = (props:React.PropsWithChildren<Props>) => {
 
-  const [friends, setFriends] = useState<UserDetails[]>(testUsers);
+  const [friends, setFriends] = useState<UserDetails[]>([]);
   const [contributors, setContributors] = useState<UserDetails[]>([]);
   const contributorRef = useRef<HTMLSelectElement>(null);
   const productRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const discountRef = useRef<HTMLInputElement>(null);
+  const [jwt, setJwt, apiUrl] = useReceiptContext();
+
 
   useEffect(() => {
     if(props.editItem) {
@@ -38,6 +26,24 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
       setFriends(prevFriends => prevFriends.filter(friend => !props.editItem?.contributorIds?.includes(friend.id)))
     }
   }, [props.editItem?.id]);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/users/friends`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${jwt}`,
+        "Accept": "application/json"
+      }
+    }).then(res => {
+      return res.json();
+    }).then((data:UserDetails[]) => {
+      console.log(data);
+      setFriends(data);
+    }).catch(err => {
+      console.log("An error occured while getting friends.");
+      console.error(err);
+    });
+  }, []);
 
   const addContributor = () => {
     try {
@@ -100,15 +106,16 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
             <input className="text-black mb-2" ref={discountRef} type="text" placeholder="Discount" name="discount" defaultValue={props.editItem ? props.editItem.discount : ""} />
           </div>
           <div className="flex flex-col mb-2">
-            <label className="mr-1 font-bold" htmlFor="discount">Contributors</label>
+            <label className="mr-1 font-bold" htmlFor="contributors">Contributors</label>
             <div className="flex justify-between">
               <select 
                 name="contributors"
                 className="text-lightBlack flex-grow max-w-9/10 mr-2"
                 ref={contributorRef}
+                onChange={addContributor}
               >
                 <option hidden></option>
-                {friends.map(friend => {
+                {friends && friends.map(friend => {
                   return(
                     <option key={friend.id} value={friend.id} >{friend.firstName} {friend.lastName} ({friend.email})</option>
                   );

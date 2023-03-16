@@ -1,7 +1,7 @@
-import { FormEvent, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { Receipt, PostReceipt, ReceiptItem, ReceiptDate, ReceiptDateTime, UserDetails } from "../../@types/receipt-manager";
+import { PostReceipt, ReceiptItem, ReceiptDate, ReceiptDateTime, UserDetails } from "../../@types/receipt-manager";
 import { ReceiptForm } from "../../components/receipt/ReceiptForm";
 import { ItemForm } from "../../components/receipt/ItemForm";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
@@ -13,7 +13,6 @@ const ReceiptNew = () => {
   const [dateBought, setDateBought] = useState<ReceiptDate>("");
   const [items, setItems] = useState<ReceiptItem[]>([]);
   const [editItem, setEditItem] = useState<ReceiptItem | null>(null);
-  const [showContributorModal, setShowContributorModal] = useState<boolean>(false);
   const [showItemModal, setShowItemModal] = useState<boolean>(false);
   const [jwt, setJwt, apiUrl] = useReceiptContext();
 
@@ -42,10 +41,6 @@ const ReceiptNew = () => {
     }
     setItems(prevItems => [...prevItems, newItem]);
     setShowItemModal(false);
-  }
-
-  const onEditItem = (id:number):ReceiptItem => {
-    return items.filter(item => item.id as number === id)[0];
   }
 
   const onSaveEdit = (id:number, contributors:UserDetails[], product: string, rawPrice: string, rawDiscount?: string):void => {
@@ -92,6 +87,7 @@ const ReceiptNew = () => {
 
     const receipt: PostReceipt = {
       store: receiptStore,
+      // SQLite requires DateTime fields to also include the time, but time does not matter for this application.
       date: `${dateBought}T00:00:00`,
       items: receiptItems,
     };
@@ -107,7 +103,7 @@ const ReceiptNew = () => {
     }).then(res => {
       return res.json();
     }).then(json => {
-      return;
+      console.log(json);
     }).catch(e => {
       return console.warn(e);
     });

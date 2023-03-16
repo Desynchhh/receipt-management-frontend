@@ -41,7 +41,6 @@ const ReceiptForm = (props:React.PropsWithChildren<Props>) => {
               name="date"
               value={props.dateBought}
               onChange={(e) => {
-                console.log(e.target.value);
                 props.setDateBought(e.target.value as ReceiptDate);
               }}
               onBlur={validateDateFormat}
