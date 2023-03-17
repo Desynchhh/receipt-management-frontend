@@ -8,14 +8,22 @@ import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 import { Modal } from "../../components/Modal";
 
-const ReceiptNew = () => {
-  const [friends, setFriends] = useState<UserDetails[]>([]);
+interface Props {
+  friends: UserDetails[]
+}
+
+const ReceiptNew = (props: Props) => {
+  const [jwt, setJwt, apiUrl] = useReceiptContext();
+  if(!jwt) {
+    window.location.replace("/");
+  }
+
+  const [friends, setFriends] = useState<UserDetails[]>(props.friends);
   const [receiptStore, setReceiptStore] = useState<string>("");
   const [dateBought, setDateBought] = useState<ReceiptDate>("");
   const [items, setItems] = useState<ReceiptItem[]>([]);
   const [editItem, setEditItem] = useState<ReceiptItem | null>(null);
   const [showItemModal, setShowItemModal] = useState<boolean>(false);
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
 
   const subtotal = useMemo(() => {
     return items.reduce((acc, curr) => {
@@ -23,31 +31,13 @@ const ReceiptNew = () => {
       return acc;
     }, 0);
   }, [items]);
-  
-  useEffect(() => {
-    fetch(`${apiUrl}/users/friends`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${jwt}`,
-        "Accept": "application/json"
-      }
-    }).then(res => {
-      return res.json();
-    }).then((data:UserDetails[]) => {
-      console.log(data);
-      setFriends(data);
-    }).catch(err => {
-      console.log("An error occured while getting friends.");
-      console.error(err);
-    });
-  }, []);
 
   const onAddItemClick = () => {
     setShowItemModal(true);
     setEditItem(null);
   }
 
-  const onAddItem = (contributors:UserDetails[], product: string, rawPrice: string, rawDiscount?: string):void => {
+  const onAddItem = (contributors:UserDetails[], product: string, rawPrice: string, rawDiscount?: string): void => {
     const contributorIds = contributors.map(contributor => contributor.id);
     const price = parseFloat(rawPrice.replace(",", ".").trim());
     const discount = rawDiscount ? (parseFloat(rawDiscount.replace(",", ".").trim()) || 0.0) : 0.0;
@@ -62,7 +52,7 @@ const ReceiptNew = () => {
     setShowItemModal(false);
   }
 
-  const onSaveEdit = (id:number, contributors:UserDetails[], product: string, rawPrice: string, rawDiscount?: string):void => {
+  const onSaveEdit = (id:number, contributors:UserDetails[], product: string, rawPrice: string, rawDiscount?: string): void => {
     setItems(prevItems => prevItems.map(item => {
       if(item.id === id) {
         const contributorIds = contributors.map(contributor => contributor.id);
@@ -78,7 +68,7 @@ const ReceiptNew = () => {
     setEditItem(null)
   }
 
-  const onRemoveItem = (id:number):void => {
+  const onRemoveItem = (id:number): void => {
     setItems(prevItems => prevItems.filter(item => item.id as number !== id));
   }
 
@@ -96,10 +86,10 @@ const ReceiptNew = () => {
     }
   }
 
-  const onSubmitReceipt = ():void => {
+  const onSubmitReceipt = (): void => {
     validateInputs();
 
-    const receiptItems:ReceiptItem[] = items.map((item) => {
+    const receiptItems: ReceiptItem[] = items.map((item) => {
       const {id: _, ...data} = item;
       return data
     });

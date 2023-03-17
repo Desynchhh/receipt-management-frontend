@@ -45,8 +45,9 @@ export const AddFriend = () => {
     <div className="add-friend">
       <form method="POST" onSubmit={onAddFriend}>
         <fieldset>
-          <legend className="text-3xl mb-3">Add a new friend!</legend>
-          <div className="form-control flex flex-col mb-2">
+          <legend className="text-3xl">Add a new friend!</legend>
+          <hr />
+          <div className="form-control flex flex-col my-2">
             <label className="mb-1" htmlFor="friend-email">Enter friend's email:</label>
             <input type="email" ref={friendEmailRef} className="text-black" name="friend-email" id="friend-email" placeholder="Email" />
           </div>

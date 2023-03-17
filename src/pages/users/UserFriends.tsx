@@ -8,48 +8,35 @@ import { FriendRequests } from "../../components/users/FriendRequests";
 
 import { UserDetails } from "../../@types/receipt-manager";
 
-export const UserFriends = () => {
-  const [friends, setFriends] = useState<UserDetails[]>([]);
-  const friendEmailRef = useRef<HTMLInputElement>(null);
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
+interface Props {
+  friends: UserDetails[],
+  addFriend: (newFriend: UserDetails) => void
+}
 
+export const UserFriends = (props: Props) => {
+  const [jwt, setJwt, apiUrl] = useReceiptContext();
   if(!jwt) {
     window.location.replace("/");
   }
 
-  useEffect(() => {
-    fetch(`${apiUrl}/users/friends`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${jwt}`,
-        "Accept": "application/json"
-      }
-    }).then(res => {
-      return res.json();
-    }).then((data:UserDetails[]) => {
-      console.log(data);
-      setFriends(data);
-    }).catch(err => {
-      console.log("An error occured while getting friends.");
-      console.error(err);
-    });
-  }, []);
+  const friendEmailRef = useRef<HTMLInputElement>(null);
+  console.log(props.friends);
 
-  const onAcceptFriendRequest = (friend:UserDetails) => {
-    setFriends(prevFriends => [...prevFriends, friend]);
+
+  const onAcceptFriendRequest = (friend: UserDetails) => {
+    props.addFriend(friend);
   }
 
   return(
     <>
     <div className="friends-container flex justify-around">
       <div className="flex flex-col justify-between gap-16">
-        <AddFriend  />
-        <hr />
+        <AddFriend />
         <FriendRequests onAccept={onAcceptFriendRequest} />
       </div>
       <div className="friends min-w-3/10">
         <div className="text-3xl border-b border-solid border-gray">Friends</div>
-        {friends && friends.map(friend => {
+        {props.friends && props.friends.map(friend => {
           return(
             <Friend key={friend.id} friend={friend} />
           );

@@ -22,7 +22,7 @@ export const FriendRequests = (props: Props) => {
     }).then(res => {
       return res.json();
     }).then((data: UserDetails[]) => {
-      console.log(data);
+      // console.log(data);
       setRequests(data);
     }).catch(err => {
       console.log("An error occured while getting pending friend requests.");
@@ -48,7 +48,7 @@ export const FriendRequests = (props: Props) => {
     }).then((data) => {
       if(reply && "Success" in data)
       props.onAccept(friend)
-      console.log(data);
+      // console.log(data);
     }).catch(err => {
       console.log("An error occured while responding to friend request.");
       console.error(err);

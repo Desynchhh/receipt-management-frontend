@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import Context from "../Context";
+import Context from "../ReceiptContext";
 import { IContext } from "../@types/receipt-manager";
 
 
