@@ -1,8 +1,8 @@
 import React, { useState, useEffect, createContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
-library.add(faPen, faXmark);
+import { faPen, faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
+library.add(faPen, faXmark, faCheck);
 
 import { IContext, StateContext } from "./@types/receipt-manager";
 
@@ -17,6 +17,7 @@ import ReceiptNew from "./pages/receipts/ReceiptNew";
 import UserLogin from "./pages/users/UserLogin";
 import UserLogout from "./pages/users/UserLogout";
 import UserNew from "./pages/users/UserNew";
+import { UserFriends } from "./pages/users/UserFriends";
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
 		"jwtContext": jwtContext,
 		"apiUrl": "http://localhost:8080/apiv2"
 	};
+
 
 	return (
 		<Context.Provider value={context}>
@@ -42,6 +44,7 @@ const App = () => {
 					</Route>
 					<Route path="/user">
 						<Route path="create" element={<UserNew />} />
+						<Route path="friends" element={<UserFriends />} />
 						<Route path="login" element={<UserLogin />} />
 						<Route path="logout" element={<UserLogout />} />
 					</Route>

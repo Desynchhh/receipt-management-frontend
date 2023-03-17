@@ -10,6 +10,15 @@ export interface IContext<T> {
 	"apiUrl": string,
 }
 
+export interface FriendRequestResponse {
+  email: string,
+  reply: boolean,
+}
+
+export interface FriendRequest {
+  email: string,
+}
+
 export interface FullUserObject {
   id: number,
   email: string,

@@ -91,10 +91,9 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
           </div>
           <div className="flex flex-col mb-2">
             <label className="mr-1 font-bold" htmlFor="contributors">Contributors</label>
-            <div className="flex justify-between">
               <select 
                 name="contributors"
-                className="text-lightBlack flex-grow max-w-9/10 mr-2"
+                className="text-lightBlack flex-grow"
                 ref={contributorRef}
                 onChange={addContributor}
               >
@@ -105,8 +104,6 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
                   );
                 })}
               </select>
-              <button type="button" className="button mb-0 max-w-1/10" onClick={addContributor}>Add person</button>
-            </div>
           </div>
           <div className="mb-3">
             {contributors.length > 0 &&
