@@ -3,16 +3,20 @@ import { HttpPostResponse } from "../../@types/receipt-manager";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
 import { useNavigate } from "react-router-dom";
 
-const UserLogout = () => {
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
+interface Props {
+  onLogout: () => void,
+}
+
+const UserLogout = (props: Props) => {
+  const [jwt, apiUrl] = useReceiptContext();
   const navigate = useNavigate();
 
   const fetchLogout = async (): Promise<boolean> => {
     const res = await fetch(`${apiUrl}/users/logout`, {
-      method: "post",
-      // headers: {
-      //   "Authorization": `Bearer ${jwt}`
-      // }
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${jwt}`
+      }
     });
     const data: HttpPostResponse<boolean, boolean> = await res.json();
     return data.Success || false;
@@ -22,7 +26,7 @@ const UserLogout = () => {
     fetchLogout()
       .then((res) => {
         if (res) {
-          setJwt("");
+          props.onLogout();
         }
         navigate("/", { replace: true });
       })

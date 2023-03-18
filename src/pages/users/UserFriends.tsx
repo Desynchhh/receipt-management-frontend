@@ -14,8 +14,8 @@ interface Props {
 }
 
 export const UserFriends = (props: Props) => {
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
-  if(!jwt) {
+  const [jwt, apiUrl] = useReceiptContext();
+  if (!jwt) {
     window.location.replace("/");
   }
 
@@ -27,22 +27,22 @@ export const UserFriends = (props: Props) => {
     props.addFriend(friend);
   }
 
-  return(
+  return (
     <>
-    <div className="friends-container flex justify-around">
-      <div className="flex flex-col justify-between gap-16">
-        <AddFriend />
-        <FriendRequests onAccept={onAcceptFriendRequest} />
+      <div className="friends-container flex justify-around">
+        <div className="flex flex-col justify-between gap-16">
+          <AddFriend />
+          <FriendRequests onAccept={onAcceptFriendRequest} />
+        </div>
+        <div className="friends min-w-3/10">
+          <div className="text-3xl border-b border-solid border-gray">Friends</div>
+          {props.friends && props.friends.map(friend => {
+            return (
+              <Friend key={friend.id} friend={friend} />
+            );
+          })}
+        </div>
       </div>
-      <div className="friends min-w-3/10">
-        <div className="text-3xl border-b border-solid border-gray">Friends</div>
-        {props.friends && props.friends.map(friend => {
-          return(
-            <Friend key={friend.id} friend={friend} />
-          );
-        })}
-      </div>
-    </div>
     </>
   );
 }

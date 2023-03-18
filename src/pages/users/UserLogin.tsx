@@ -7,10 +7,14 @@ import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 import { buildFormData, FormErrors } from "../../components/Form";
 
-const UserLogin = () => {
+interface Props {
+  onLogin: (token: string) => void,
+}
+
+const UserLogin = (props: Props) => {
   document.title = "Budgeze - Sign in";
   const [errors, setErrors] = useState<string[]>([]);
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
+  const [jwt, apiUrl] = useReceiptContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -24,24 +28,24 @@ const UserLogin = () => {
           "Content-Type": "application/x-www-form-urlencoded",
         }
       });
-  
+
       const data: HttpPostResponse<string, string[]> = await res.json();
       if (data.Failure) {
         setErrors(data.Failure);
         return;
       }
-      if(data.Success) {
-        setJwt(data.Success);
+      if (data.Success) {
+        props.onLogin(data.Success);
         navigate("/", { replace: true });
       }
     } catch (error) {
-      if(error instanceof TypeError) {
-        if(error.message.includes("NetworkError")) {
+      if (error instanceof TypeError) {
+        if (error.message.includes("NetworkError")) {
           setErrors(["Could not connect to server."]);
         }
       } else {
         setErrors(["Could not create user. Try again later."]);
-      }      
+      }
     }
   }
 

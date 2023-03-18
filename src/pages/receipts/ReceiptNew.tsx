@@ -20,7 +20,7 @@ interface Props {
 }
 
 const ReceiptNew = (props: Props) => {
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
+  const [jwt, apiUrl] = useReceiptContext();
   if (!jwt) {
     window.location.replace("/");
   }

@@ -3,12 +3,9 @@ import Context from "../ReceiptContext";
 import { IContext } from "../@types/receipt-manager";
 
 
-export const useReceiptContext = (): [string, React.Dispatch<React.SetStateAction<string>>, string] => {
-  const context = useContext(Context) as IContext<string>;
+export const useReceiptContext = (): [string, string] => {
+  const context = useContext(Context) as IContext;
 
-  const [jwt, setJwt] = context.jwtContext;
-  const apiUrl = context.apiUrl;
-
-  return [jwt, setJwt, apiUrl];
+  return [context.jwt, context.apiUrl];
 }
 

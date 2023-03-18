@@ -7,10 +7,10 @@ interface Props {
   friends: UserDetails[],
   addItem: Function,
   editItem: ReceiptItem | null,
-  onSave: (id:number, contributors:UserDetails[], product: string, rawPrice: string, rawDiscount?: string) => void
+  onSave: (id: number, contributors: UserDetails[], product: string, rawPrice: string, rawDiscount?: string) => void
 }
 
-export const ItemForm = (props:React.PropsWithChildren<Props>) => {
+export const ItemForm = (props: React.PropsWithChildren<Props>) => {
 
   const [friends, setFriends] = useState<UserDetails[]>(props.friends);
   const [contributors, setContributors] = useState<UserDetails[]>([]);
@@ -18,11 +18,11 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
   const productRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const discountRef = useRef<HTMLInputElement>(null);
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
+  const [jwt, apiUrl] = useReceiptContext();
 
 
   useEffect(() => {
-    if(props.editItem) {
+    if (props.editItem) {
       setContributors(friends.filter(friend => props.editItem?.contributorIds?.includes(friend.id)));
       setFriends(prevFriends => prevFriends.filter(friend => !props.editItem?.contributorIds?.includes(friend.id)))
     }
@@ -31,21 +31,21 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
 
   const addContributor = () => {
     try {
-      if(contributorRef.current === undefined || contributorRef.current === null ) {
+      if (contributorRef.current === undefined || contributorRef.current === null) {
         throw new Error("Element not found.", {
           cause: "Select element not found."
         });
       }
 
       const selectedContributorId = Number(contributorRef.current.value);
-      if(!selectedContributorId) {
+      if (!selectedContributorId) {
         throw new Error("No contributor selected.", {
           cause: "No contributor selected."
         });
       }
-      
+
       const hasContributor = contributors.some(contributor => contributor.id === selectedContributorId);
-      if(!hasContributor) {
+      if (!hasContributor) {
         const newContributor: UserDetails = friends.filter(friend => friend.id === selectedContributorId)[0];
         setFriends(prevFriends => prevFriends.filter(friend => friend.id !== newContributor.id));
         setContributors(prevContributors => [...prevContributors, newContributor]);
@@ -54,7 +54,7 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
       console.error(error);
     }
   }
-  
+
   const removeContributor = (id: number): void => {
     const friend = contributors.filter(contributor => contributor.id === id)[0];
     setContributors(prevContributors => prevContributors.filter(contributor => contributor.id !== id));
@@ -66,14 +66,14 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
     const product = productRef.current ? productRef.current.value : "0.0";
     const price = priceRef.current ? priceRef.current.value : "";
     const discount = discountRef.current ? discountRef.current.value : "0.0";
-    if(!props.editItem) {
+    if (!props.editItem) {
       props.addItem(contributors, product, price, discount);
       return;
     }
     props.onSave(props.editItem.id as number, contributors, product, price, discount);
   }
 
-  return(
+  return (
     <>
       <form className="w-full max-w-2/3" onSubmit={e => onSubmit(e)}>
         <div className="flex flex-col mb-2">
@@ -91,25 +91,25 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
           </div>
           <div className="flex flex-col mb-2">
             <label className="mr-1 font-bold" htmlFor="contributors">Contributors</label>
-              <select 
-                name="contributors"
-                className="text-lightBlack flex-grow"
-                ref={contributorRef}
-                onChange={addContributor}
-              >
-                <option hidden></option>
-                {friends && friends.map(friend => {
-                  return(
-                    <option key={friend.id} value={friend.id} >{friend.firstName} {friend.lastName} ({friend.email})</option>
-                  );
-                })}
-              </select>
+            <select
+              name="contributors"
+              className="text-lightBlack flex-grow"
+              ref={contributorRef}
+              onChange={addContributor}
+            >
+              <option hidden></option>
+              {friends && friends.map(friend => {
+                return (
+                  <option key={friend.id} value={friend.id} >{friend.firstName} {friend.lastName} ({friend.email})</option>
+                );
+              })}
+            </select>
           </div>
           <div className="mb-3">
             {contributors.length > 0 &&
-            <ul>
-              {contributors.map(contributor => <li><Contributor key={contributor.id} contributor={contributor} onRemove={removeContributor}/></li>)}
-            </ul>
+              <ul>
+                {contributors.map(contributor => <li><Contributor key={contributor.id} contributor={contributor} onRemove={removeContributor} /></li>)}
+              </ul>
             }
           </div>
           {props.editItem &&

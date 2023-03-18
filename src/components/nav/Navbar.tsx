@@ -5,9 +5,9 @@ import Guestbar from "./Guestbar";
 import Userbar from "./Userbar";
 
 const Navbar = () => {
-    const [jwt, setJwt, apiUrl] = useReceiptContext();
+    const [jwt, apiUrl] = useReceiptContext();
 
-    return(
+    return (
         <nav className="relative p-6">
             <div className="flex items-center justify-between">
                 <div className="p2">

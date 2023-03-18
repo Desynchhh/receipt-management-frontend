@@ -5,12 +5,12 @@ import { useReceiptContext } from "../../hooks/useReceiptContext";
 import { UserDetails, FriendRequestResponse } from "../../@types/receipt-manager";
 
 interface Props {
-  onAccept: (friend:UserDetails) => void,
+  onAccept: (friend: UserDetails) => void,
 }
 
 export const FriendRequests = (props: Props) => {
   const [requests, setRequests] = useState<UserDetails[]>([]);
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
+  const [jwt, apiUrl] = useReceiptContext();
 
   useEffect(() => {
     fetch(`${apiUrl}/users/pending-requests`, {
@@ -31,7 +31,7 @@ export const FriendRequests = (props: Props) => {
   }, []);
 
   const onRequestResponse = (friend: UserDetails, reply: boolean): void => {
-    const requestResponse:FriendRequestResponse = {
+    const requestResponse: FriendRequestResponse = {
       email: friend.email,
       reply,
     };
@@ -46,8 +46,8 @@ export const FriendRequests = (props: Props) => {
     }).then(res => {
       return res.json();
     }).then((data) => {
-      if(reply && "Success" in data)
-      props.onAccept(friend)
+      if (reply && "Success" in data)
+        props.onAccept(friend)
       // console.log(data);
     }).catch(err => {
       console.log("An error occured while responding to friend request.");

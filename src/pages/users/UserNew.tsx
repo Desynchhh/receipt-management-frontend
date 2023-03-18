@@ -6,7 +6,7 @@ import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 const UserNew = () => {
   document.title = "Budgeze - Sign up";
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
+  const [jwt, apiUrl] = useReceiptContext();
   const [errors, setErrors] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
@@ -18,7 +18,7 @@ const UserNew = () => {
     setErrors([]);
     const form = e.currentTarget;
     const formData = buildFormData(form);
-    
+
     try {
       const res = await fetch(`${apiUrl}/users/create`, {
         method: "post",
@@ -28,19 +28,19 @@ const UserNew = () => {
         }
       });
       const data: HttpPostResponse<FullUserObject, string[]> = await res.json();
-  
+
       if (data.Failure) {
         setErrors(data.Failure);
       }
       else if (data.Success) {
         setMessage("User created successfully! You can now log in!");
-        for(let input of form.querySelectorAll("input[type=text]") as NodeListOf<HTMLInputElement>) {
+        for (let input of form.querySelectorAll("input[type=text],input[type=password]") as NodeListOf<HTMLInputElement>) {
           input.value = "";
         }
       }
     } catch (error) {
-      if(error instanceof TypeError) {
-        if(error.message.includes("NetworkError")) {
+      if (error instanceof TypeError) {
+        if (error.message.includes("NetworkError")) {
           setErrors(["Could not connect to server."]);
         }
       } else {
@@ -80,8 +80,8 @@ const UserNew = () => {
             <input type="submit" value="Submit" disabled={isDisabled} className="py-1 px-2 bg-lightGray text-xs" />
           </div>
         </form>
-      {errors.length > 0 && <FormErrors errors={errors} />}
-      {message.length > 0 && <FormSuccess message={message} />}
+        {errors.length > 0 && <FormErrors errors={errors} />}
+        {message.length > 0 && <FormSuccess message={message} />}
       </div>
     </>
   );

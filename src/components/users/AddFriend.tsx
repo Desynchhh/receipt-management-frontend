@@ -4,20 +4,20 @@ import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 export const AddFriend = () => {
   const friendEmailRef = useRef<HTMLInputElement>(null);
-  const [jwt, setJwt, apiUrl] = useReceiptContext();
+  const [jwt, apiUrl] = useReceiptContext();
 
   const onAddFriend = (e: React.FormEvent) => {
     e.preventDefault();
     const email = friendEmailRef.current?.value;
-    if(!email) {
+    if (!email) {
       console.log("No email entered");
       return;
     }
 
-    const friendRequest:FriendRequest = {
+    const friendRequest: FriendRequest = {
       email
     };
-    
+
     fetch(`${apiUrl}/users/add-friend`, {
       method: "POST",
       body: JSON.stringify(friendRequest),
@@ -34,7 +34,7 @@ export const AddFriend = () => {
       console.log("An error occured while getting friends.");
       console.error(err);
     }).finally(() => {
-      if(friendEmailRef.current) {
+      if (friendEmailRef.current) {
         friendEmailRef.current.value = "";
       }
     });

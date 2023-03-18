@@ -1,10 +1,10 @@
-import React, { useState, useEffect, createContext } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPen, faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
 library.add(faPen, faXmark, faCheck);
 
-import { IContext, StateContext, UserDetails } from "./@types/receipt-manager";
+import { IContext, UserDetails } from "./@types/receipt-manager";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -23,13 +23,44 @@ import { UserFriends } from "./pages/users/UserFriends";
 
 const App = () => {
 	const [jwt, setJwt] = useState("");
-  const [friends, setFriends] = useState<UserDetails[]>([]);
+	const [friends, setFriends] = useState<UserDetails[]>([]);
 
-	const jwtContext: StateContext<string> = [ jwt, setJwt ];
-	const context: IContext<string> = {
-		"jwtContext": jwtContext,
+	const context: IContext = {
+		"jwt": jwt,
 		"apiUrl": "http://localhost:8080/apiv2"
 	};
+
+	useEffect(() => {
+		if (!jwt) {
+			setFriends([]);
+			return;
+		};
+
+		fetch(`${context.apiUrl}/users/friends`, {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${jwt}`,
+				"Accept": "application/json"
+			}
+		}).then(res => {
+			return res.json();
+		}).then((data: UserDetails[]) => {
+			console.log(data);
+			setFriends(data);
+			console.log("friends set!");
+		}).catch(err => {
+			console.log("An error occured while getting friends.");
+			console.error(err);
+		});
+	}, [friends.length, jwt]);
+
+	const handleLogout = (): void => {
+		setJwt("");
+	}
+
+	const handleLogin = (token: string): void => {
+		setJwt(token);
+	}
 
 	const onAddFriend = (newFriend: UserDetails): void => {
 		setFriends(prevFriends => [...prevFriends, newFriend]);
@@ -38,30 +69,6 @@ const App = () => {
 	const onRemoveFriend = (oldFriend: UserDetails): void => {
 		setFriends(prevFriends => prevFriends.filter(friend => friend.id !== oldFriend.id));
 	}
-	
-  useEffect(() => {
-		if(!jwt) {
-			setFriends([]);
-			return;
-		};
-
-    fetch(`${context.apiUrl}/users/friends`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${jwt}`,
-        "Accept": "application/json"
-      }
-    }).then(res => {
-      return res.json();
-    }).then((data:UserDetails[]) => {
-      console.log(data);
-      setFriends(data);
-			console.log("friends set!");
-    }).catch(err => {
-      console.log("An error occured while getting friends.");
-      console.error(err);
-    });
-  }, [friends.length, jwt]);
 
 	return (
 		<Context.Provider value={context}>
@@ -78,9 +85,9 @@ const App = () => {
 					<Route path="/user">
 						<Route path="create" element={<UserNew />} />
 						<Route path="friends" element={<UserFriends friends={friends} addFriend={onAddFriend} />} />
-						<Route path="login" element={<UserLogin />} />
+						<Route path="login" element={<UserLogin onLogin={handleLogin} />} />
 						<Route path="profile" element={<UserProfile />} />
-						<Route path="logout" element={<UserLogout />} />
+						<Route path="logout" element={<UserLogout onLogout={handleLogout} />} />
 					</Route>
 				</Routes>
 			</div>
