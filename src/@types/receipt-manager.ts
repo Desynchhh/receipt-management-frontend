@@ -38,6 +38,11 @@ export interface UserDetails {
   lastName: string,
 }
 
+export interface ContributorSubtotal {
+  contributor: UserDetails,
+  subtotal: number
+}
+
 // Ex: 2023-03-01
 export type ReceiptDate = `${number}${number}${number}${number}-${number}${number}-${number}${number}` | "";
 export const receiptDateRegex = /^[\d]{4}-[\d]{2}-[\d]{2}$/;

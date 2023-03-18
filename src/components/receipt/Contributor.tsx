@@ -7,13 +7,14 @@ interface Props {
 
 export const Contributor = (props:Props) => {
   return(
-    <li>
+    <>
       <span
         className="text-red-500 mr-1 cursor-pointer"
-        onClick={() => props.onRemove(props.contributor.id)}>
+        onClick={() => props.onRemove(props.contributor.id)}
+      >
           &times;
-        </span>
-        {props.contributor.firstName} {props.contributor.lastName}
-    </li>
+      </span>
+      {props.contributor.firstName} {props.contributor.lastName}
+    </>
   );
 }

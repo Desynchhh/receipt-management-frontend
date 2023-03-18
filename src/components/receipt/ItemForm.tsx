@@ -108,11 +108,7 @@ export const ItemForm = (props:React.PropsWithChildren<Props>) => {
           <div className="mb-3">
             {contributors.length > 0 &&
             <ul>
-              {contributors.map(contributor => {
-                return(
-                  <Contributor key={contributor.id} contributor={contributor} onRemove={removeContributor}/>
-                );
-              })}
+              {contributors.map(contributor => <li><Contributor key={contributor.id} contributor={contributor} onRemove={removeContributor}/></li>)}
             </ul>
             }
           </div>

@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { PostReceipt, ReceiptItem, ReceiptDate, ReceiptDateTime, UserDetails } from "../../@types/receipt-manager";
+import { PostReceipt, ReceiptItem, ReceiptDate, ReceiptDateTime, UserDetails, ContributorSubtotal } from "../../@types/receipt-manager";
 import { ReceiptForm } from "../../components/receipt/ReceiptForm";
 import { ItemForm } from "../../components/receipt/ItemForm";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
@@ -25,11 +25,22 @@ const ReceiptNew = (props: Props) => {
   const [editItem, setEditItem] = useState<ReceiptItem | null>(null);
   const [showItemModal, setShowItemModal] = useState<boolean>(false);
 
-  const subtotal = useMemo(() => {
-    return items.reduce((acc, curr) => {
-      acc += (curr.price - curr.discount)
-      return acc;
-    }, 0);
+
+  const [subtotal, contributorSubtotals]: [number, ContributorSubtotal[]] = useMemo(() => {
+    const subtotal = items.reduce(calcSubtotal, 0);
+
+    const contributorIds = items
+      .map(item => item.contributorIds)
+      .flat()
+      .filter((value, index, array) => array.indexOf(value) === index);
+
+    const contributors = props.friends.filter(friend => contributorIds.includes(friend.id));
+
+    const contributorSubtotals: ContributorSubtotal[] = contributors.reduce<ContributorSubtotal[]>((acc, curr) => processContributorSubtotals(acc, curr, items), []);
+
+    console.log(contributorSubtotals);
+
+    return [subtotal, contributorSubtotals];
   }, [items]);
 
   const onAddItemClick = () => {
@@ -137,7 +148,7 @@ const ReceiptNew = (props: Props) => {
             </header>
           }
           <div className="receipt-body flex flex-col grow justify-between h-3/5">
-            <div className="">
+            <div className="mb-2">
               <div className="flex justify-between mx-3">
                 <div className="flex max-w-1/10 w-full ">
                   <p className="mr-2 font-bold">PRODUCT</p>
@@ -166,8 +177,14 @@ const ReceiptNew = (props: Props) => {
                 );
               })}
             </div>
-            <div className="text-left">
-              <p className="border-t-2 border-solid p-1 pl-2">Total: {subtotal}</p>
+            <div className="text-left border-t-2 border-solid p-1 pl-2">
+              {contributorSubtotals.length > 0 && contributorSubtotals.map(contributorSubtotal => {
+                return(
+                  <p key={contributorSubtotal.contributor.id}>{contributorSubtotal.contributor.firstName}'s share: {contributorSubtotal.subtotal}</p>
+                  )
+                })
+              }
+              <p className="mt-2">Subtotal: {subtotal}</p>
             </div>
           </div>
         </div>
@@ -180,4 +197,31 @@ const ReceiptNew = (props: Props) => {
     </>
   )
 }
+
+const calcSubtotal = (subtotal: number, item: ReceiptItem) => {
+  subtotal += (item.price - item.discount)
+  return subtotal;
+}
+
+const calcContributorTotal = (totalContribution: number, item: ReceiptItem) => {
+  if(!item.contributorIds) {
+    return totalContribution;
+  }
+
+  totalContribution += (item.price - item.discount) / item.contributorIds.length;
+  return totalContribution;
+}
+
+const processContributorSubtotals = (subtotals: ContributorSubtotal[], contributor:UserDetails, items: ReceiptItem[]) => {
+  const contributorItems = items.filter(item => item.contributorIds?.includes(contributor.id));
+
+  const total = contributorItems.reduce(calcContributorTotal, 0);
+
+  subtotals.push({
+    contributor: contributor,
+    subtotal: total,
+  });
+  return subtotals;
+}
+
 export default ReceiptNew;
