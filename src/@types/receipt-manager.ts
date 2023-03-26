@@ -58,17 +58,20 @@ export interface ReceiptItem {
   contributorIds?: number[];
 }
 
-export interface Receipt {
-  userId?: number;
+export interface ReceiptData {
+  id: number;
+  userId: number;
   store: string;
-  date: ReceiptDate | ReceiptDateTime;
-  items?: ReceiptItem[];
+  dateBought: ReceiptDate | ReceiptDateTime;
   subtotal: number;
+  createdAt: ReceiptDateTime;
+  updatedAt: ReceiptDateTime;
+  isDeleted: boolean;
 }
 
 export interface PostReceipt {
   store: string;
-  date: ReceiptDate | ReceiptDateTime;
+  date: ReceiptDateTime;
   items: ReceiptItem[];
 }
 
