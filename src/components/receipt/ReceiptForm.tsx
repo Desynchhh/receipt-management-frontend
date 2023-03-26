@@ -8,7 +8,7 @@ interface Props {
   dateBought: ReceiptDate,
   onChangeDate: (e: React.ChangeEvent<HTMLInputElement>) => void,
   onAddItem: () => void,
-  onSubmit: () => void,
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void,
 }
 
 const ReceiptForm = (props: React.PropsWithChildren<Props>) => {
@@ -28,7 +28,7 @@ const ReceiptForm = (props: React.PropsWithChildren<Props>) => {
 
   return (
     <>
-      <form>
+      <form onSubmit={(e) => props.onSubmit(e)}>
         <div className="flex flex-col mb-2">
           <div className="flex flex-col mb-1">
             <label className="mr-1" htmlFor="store">Store</label>
@@ -48,8 +48,8 @@ const ReceiptForm = (props: React.PropsWithChildren<Props>) => {
             {errors.length > 0 && <FormErrors errors={errors} />}
           </div>
         </div>
-        <button className="button" onClick={props.onAddItem}>Add item</button>
-        <input type="submit" name="submit" className="button" value="Submit" onClick={props.onSubmit} />
+        <button type="button" className="button" onClick={props.onAddItem}>Add item</button>
+        <input type="submit" name="submit" className="button" value="Submit" />
       </form>
     </>
   );

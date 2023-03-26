@@ -140,7 +140,8 @@ const ReceiptNew = (props: Props) => {
     }
   };
 
-  const onSubmitReceipt = (): void => {
+  const onSubmitReceipt = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
     validateInputs();
 
     const receiptItems: ReceiptItem[] = items.map((item) => {
