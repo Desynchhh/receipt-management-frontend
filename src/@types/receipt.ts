@@ -1,42 +1,4 @@
-import React from "react";
-
-export interface IContext {
-  jwt: string;
-  apiUrl: string;
-}
-
-export interface FriendRequestResponse {
-  email: string;
-  reply: boolean;
-}
-
-export interface FriendRequest {
-  email: string;
-}
-
-export interface FullUserObject {
-  id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  apiToken?: string;
-  createdAt: string;
-  updatedAt: string;
-  isDeleted: boolean;
-}
-
-export interface UserDetails {
-  id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-}
-
-export interface ContributorSubtotal {
-  contributor: UserDetails;
-  subtotal: number;
-}
+import { UserDetails } from "./users/user";
 
 // Ex: 2023-03-01
 export type ReceiptDate =
@@ -75,7 +37,7 @@ export interface PostReceipt {
   items: ReceiptItem[];
 }
 
-export interface HttpPostResponse<S, F> {
-  Failure?: F;
-  Success?: S;
+export interface ContributorSubtotal {
+  contributor: UserDetails;
+  subtotal: number;
 }
