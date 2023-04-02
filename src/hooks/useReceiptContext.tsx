@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import Context from "../ReceiptContext";
-import { IContext } from "../@types/receipt-manager";
+import { IContext } from "../@types";
 
 
 export const useReceiptContext = (): [string, string] => {

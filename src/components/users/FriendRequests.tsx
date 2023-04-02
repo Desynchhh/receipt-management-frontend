@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
 
-import { UserDetails, FriendRequestResponse } from "../../@types/receipt-manager";
+import { UserDetails, FriendRequestResponse } from "../../@types";
 
 interface Props {
   onAccept: (friend: UserDetails) => void,

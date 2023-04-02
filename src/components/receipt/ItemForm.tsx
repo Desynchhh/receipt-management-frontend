@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo, FormEvent } from "react";
-import { ReceiptItem, UserDetails } from "../../@types/receipt-manager";
+import { ReceiptItem, UserDetails } from "../../@types";
 import { Contributor } from "./Contributor";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
 

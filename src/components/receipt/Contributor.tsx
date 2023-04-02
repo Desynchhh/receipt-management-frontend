@@ -1,18 +1,18 @@
-import { UserDetails } from "../../@types/receipt-manager";
+import { UserDetails } from "../../@types";
 
 interface Props {
   contributor: UserDetails,
-  onRemove: (id:number) => void,
+  onRemove: (id: number) => void,
 }
 
-export const Contributor = (props:Props) => {
-  return(
+export const Contributor = (props: Props) => {
+  return (
     <>
       <span
         className="text-red-500 mr-1 cursor-pointer"
         onClick={() => props.onRemove(props.contributor.id)}
       >
-          &times;
+        &times;
       </span>
       {props.contributor.firstName} {props.contributor.lastName}
     </>

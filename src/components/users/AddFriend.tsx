@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { FriendRequest, HttpPostResponse } from "../../@types/receipt-manager";
+import { FriendRequest, HttpPostResponse } from "../../@types";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
 
 export const AddFriend = () => {

@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { FullUserObject, HttpPostResponse } from "../../@types/receipt-manager";
+import { FullUserObject, HttpPostResponse } from "../../@types";
 import { buildFormData, FormErrors, FormSuccess } from "../../components/Form";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
 

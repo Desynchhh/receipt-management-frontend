@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-import { IContext } from "./@types/receipt-manager";
+import { IContext } from "./@types";
 
-export default createContext<IContext<string> | null>(null);
+export default createContext<IContext | null>(null);

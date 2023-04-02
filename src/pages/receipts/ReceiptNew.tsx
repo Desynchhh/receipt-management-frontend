@@ -8,7 +8,7 @@ import {
   ReceiptDateTime,
   UserDetails,
   ContributorSubtotal,
-} from "../../@types/receipt-manager";
+} from "../../@types";
 import { ReceiptForm } from "../../components/receipt/ReceiptForm";
 import { ItemForm } from "../../components/receipt/ItemForm";
 import { useReceiptContext } from "../../hooks/useReceiptContext";

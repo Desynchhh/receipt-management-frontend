@@ -1,6 +1,6 @@
-import { useState } from "react"
-import { ReceiptDate, ReceiptDateTime, receiptDateRegex, receiptDateTimeRegex } from "../../@types/receipt-manager"
-import { FormErrors } from "../Form"
+import { useState } from "react";
+import { ReceiptDate, ReceiptDateTime, receiptDateRegex, receiptDateTimeRegex } from "../../@types";
+import { FormErrors } from "../Form";
 
 interface Props {
   receiptStore: string,

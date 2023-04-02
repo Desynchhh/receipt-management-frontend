@@ -4,7 +4,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPen, faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
 library.add(faPen, faXmark, faCheck);
 
-import { IContext, UserDetails } from "./@types/receipt-manager";
+import { IContext, UserDetails } from "./@types";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -22,7 +22,8 @@ import { UserFriends } from "./pages/users/UserFriends";
 
 
 const App = () => {
-	const [jwt, setJwt] = useState("");
+	// const [jwt, setJwt] = useState("");
+	const [jwt, setJwt] = useState("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZW1haWwiOiJtbEBlbWFpbC50ZXN0IiwiZmlyc3RfbmFtZSI6Ik1pa2tlbCIsImxhc3RfbmFtZSI6IkxhcnNlbiIsInBhc3N3b3JkIjoiJDJiJDEyJHpha1hJbXhXNUlabFRqLzlzV1lHdk9BYlVCeVNSQVpsVWlOLk9XSWl0Zi5USWNYdS5OalpXIiwiZXhwIjoxNjgxMDQ4MTQ4fQ.t4vfsyi24z3DII5bj4FMePTu8qi4xWU4fJ_E-E4K8rg");
 	const [friends, setFriends] = useState<UserDetails[]>([]);
 
 	const context: IContext = {

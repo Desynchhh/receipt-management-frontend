@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
 
-import { ReceiptData, HttpPostResponse } from "../../@types/receipt-manager";
+import { ReceiptData, HttpPostResponse } from "../../@types";
 import { Link } from "react-router-dom";
 
 const ReceiptList = () => {

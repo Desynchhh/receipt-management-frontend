@@ -6,7 +6,7 @@ import { Friend } from "../../components/users/Friend";
 import { AddFriend } from "../../components/users/AddFriend";
 import { FriendRequests } from "../../components/users/FriendRequests";
 
-import { UserDetails } from "../../@types/receipt-manager";
+import { UserDetails } from "../../@types";
 
 interface Props {
   friends: UserDetails[],

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { HttpPostResponse } from "../../@types/receipt-manager";
+import { HttpPostResponse } from "../../@types";
 import { useReceiptContext } from "../../hooks/useReceiptContext";
 import { useNavigate } from "react-router-dom";
 

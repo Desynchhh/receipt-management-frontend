@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { HttpPostResponse } from "../../@types/receipt-manager";
+import { HttpPostResponse } from "../../@types";
 
 import { useReceiptContext } from "../../hooks/useReceiptContext";
 
