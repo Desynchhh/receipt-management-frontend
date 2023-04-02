@@ -152,7 +152,7 @@ const ReceiptNew = (props: Props) => {
     const receipt: PostReceipt = {
       store: receiptStore,
       // SQLite requires DateTime fields to also include the time, but time does not matter for this application.
-      date: `${dateBought}T00:00:00`,
+      date: `${dateBought}T12:00:00`,
       items: receiptItems,
     };
 
